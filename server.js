@@ -8,13 +8,27 @@ const app = express();
 
 //load the quotes JSON
 const quotes = require("./quotes.json");
+//console.log(quotes[1].author)
 
 // Now register handlers for some routes:
 //   /                  - Return some helpful welcome info (text)
 //   /quotes            - Should return all quotes (json)
 //   /quotes/random     - Should return ONE quote (json)
+
 app.get("/", function (request, response) {
-  response.send("Neill's Quote Server!  Ask me for /quotes/random, or /quotes");
+  response.send(
+    "Moonia's Quote Server!  Ask me for /quotes/random, or /quotes"
+  );
+});
+
+app.get("/quotes", function (request, response) {
+  console.log(quotes[0]);
+  response.send(quotes);
+});
+
+app.get("/quotes/random", function (request, response) {
+  const randomQuote = pickFromArray(quotes);
+  response.send(randomQuote);
 });
 
 //START OF YOUR CODE...
@@ -26,12 +40,17 @@ app.get("/", function (request, response) {
 //example: pickFromArray(myContactsArray)
 //
 function pickFromArray(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+  const lengthOfArray = arr.length;
+  const randomNumber = Math.random();
+  const randomNumberTimesLength = randomNumber * lengthOfArray;
+  const integer = Math.floor(randomNumberTimesLength);
+  return arr[integer];
+  //return arr[Math.floor()(Math.random()) * arr.length]
 }
 
 //Start our server so that it listens for HTTP requests!
 let port = 5000;
 
-app.listen( port, function () {
+app.listen(port, function () {
   console.log("Your app is listening on port " + port);
 });
