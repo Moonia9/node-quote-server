@@ -31,6 +31,28 @@ app.get("/quotes/random", function (request, response) {
   response.send(randomQuote);
 });
 
+//Query parameters
+
+// app.get("/quotes/search", function (request, response) {
+//   let term = request.query.word;
+//   response.send(term); //should return query param
+// });
+
+//search for quote with the word passed in the query parameter "term"
+app.get("/quotes/search", function (request, response) {
+  console.log("something else");
+  //get the search term from the query parameters
+  let term = request.query.term;
+
+  //find all quotes containing the search term
+  let matches = findQuotesContainingTerm(quotes, term);
+  console.log(matches, "something");
+
+  //respond with the matches
+
+  response.send(matches); //should return query param
+});
+
 //START OF YOUR CODE...
 
 //...END OF YOUR CODE
@@ -46,6 +68,25 @@ function pickFromArray(arr) {
   const integer = Math.floor(randomNumberTimesLength);
   return arr[integer];
   //return arr[Math.floor()(Math.random()) * arr.length]
+}
+
+//accepts an array of quotes and a term, returns all quotes containing that term
+//in the author name or quote text
+function findQuotesContainingTerm(quotes, term) {
+  let matches = [];
+  let lowercasedTerm = term.toLowerCase();
+  //look at each quote object :
+  quotes.forEach((item) => {
+    //if author or quote contains term, include it in the result
+    if (
+      item.quote.toLowerCase().includes(lowercasedTerm) ||
+      item.author.toLowerCase().includes(lowercasedTerm)
+    ) {
+      matches.push(item);
+    }
+  });
+  //return all matches
+  return matches;
 }
 
 //Start our server so that it listens for HTTP requests!
