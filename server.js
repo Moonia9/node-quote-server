@@ -27,125 +27,69 @@ app.get("/quotes", function (request, response) {
   response.send(quotes);
 });
 
-//APIs in Node Exercise week 2
-//GET - Read/Returns a single quote object (by the position in the array)
-app.get("/quotes/:id", function (request, response) {
-  const index = parseInt(request.params.id) - 1;
-  const quote = quotes[index];
-  if (quote) {
-    response.send(quote);
-  } else {
-    response.status(404).send();
-  }
-  console.log(typeof index);
-  response.send(quote);
-});
-
-//POST - Create a new quote (add it to the end of the array)
-app.post("/quotes", function (request, response) {
-  //get the new object
-  const quote = {
-    quote: request.query.quote,
-    author: request.query.author,
-  };
-  console.log(quote);
-  //add it to the quotes array
-  quotes.push(quote);
-  console.log(quotes.length);
-  //return the id for the new quote object
-  response.status(201).send({ id: quotes.length });
-});
-
-//PUT - Update an existing quote -> I need to specify an id, the thing that I want to update
-app.put("/quotes/:id", function (request, response) {
-  //get existing quote
-  const quote = {
-    quote: request.query.quote,
-    author: request.query.author,
-  };
-  //get the index of the existing quote object
-  const index = parseInt(request.params.id) - 1;
-  //replace quote object at specified index with new one
-  const result = quotes.splice(index, 1, quote);
-  console.log("removed quote", result);
-  //return new quote object
-  response.send(quote);
-});
-
-//DELETE - Delete one of the quotes
-
-app.delete("/quotes/:id", function (request, response) {
-  //get the index of the existing quote object
-  const index = parseInt(request.params.id) - 1;
-  //replace existing quote item at specified index from array amd replace it with "undefined"
-  quotes.splice(index, 1, undefined); //delete one item at index 1 and replace it with undefined
-  //return status 204 - no content
-  response.status(204).send();
-});
-
 //NODE AND EXPRESS EXERCISES week 1
-// app.get("/quotes/random", function (request, response) {
-//   const randomQuote = pickFromArray(quotes);
-//   response.send(randomQuote);
-// });
+app.get("/quotes/random", function (request, response) {
+  const randomQuote = pickFromArray(quotes);
+  response.send(randomQuote);
+});
 
-// //Query parameters
+//Query parameters
 
-// // app.get("/quotes/search", function (request, response) {
-// //   let term = request.query.word;
-// //   response.send(term); //should return query param
-// // });
-
-// //search for quote with the word passed in the query parameter "term"
 // app.get("/quotes/search", function (request, response) {
-//   console.log("something else");
-//   //get the search term from the query parameters
-//   let term = request.query.term;
-
-//   //find all quotes containing the search term
-//   let matches = findQuotesContainingTerm(quotes, term);
-//   console.log(matches, "something");
-
-//   //respond with the matches
-
-//   response.send(matches); //should return query param
+//   let term = request.query.word;
+//   response.send(term); //should return query param
 // });
 
-// //START OF YOUR CODE...
+//search for quote with the word passed in the query parameter "term"
+app.get("/quotes/search", function (request, response) {
+  console.log("something else");
+  //get the search term from the query parameters
+  let term = request.query.term;
 
-// //...END OF YOUR CODE
+  //find all quotes containing the search term
+  let matches = findQuotesContainingTerm(quotes, term);
+  console.log(matches, "something");
 
-// //You can use this function to pick one element at random from a given array
-// //example: pickFromArray([1,2,3,4]), or
-// //example: pickFromArray(myContactsArray)
-// //
-// function pickFromArray(arr) {
-//   const lengthOfArray = arr.length;
-//   const randomNumber = Math.random();
-//   const randomNumberTimesLength = randomNumber * lengthOfArray;
-//   const integer = Math.floor(randomNumberTimesLength);
-//   return arr[integer];
-//   //return arr[Math.floor()(Math.random()) * arr.length]
-// }
+  //respond with the matches
 
-// //accepts an array of quotes and a term, returns all quotes containing that term
-// //in the author name or quote text
-// function findQuotesContainingTerm(quotes, term) {
-//   let matches = [];
-//   let lowercasedTerm = term.toLowerCase();
-//   //look at each quote object :
-//   quotes.forEach((item) => {
-//     //if author or quote contains term, include it in the result
-//     if (
-//       item.quote.toLowerCase().includes(lowercasedTerm) ||
-//       item.author.toLowerCase().includes(lowercasedTerm)
-//     ) {
-//       matches.push(item);
-//     }
-//   });
-//   //return all matches
-//   return matches;
-// }
+  response.send(matches); //should return query param
+});
+
+//START OF YOUR CODE...
+
+//...END OF YOUR CODE
+
+//You can use this function to pick one element at random from a given array
+//example: pickFromArray([1,2,3,4]), or
+//example: pickFromArray(myContactsArray)
+//
+function pickFromArray(arr) {
+  const lengthOfArray = arr.length;
+  const randomNumber = Math.random();
+  const randomNumberTimesLength = randomNumber * lengthOfArray;
+  const integer = Math.floor(randomNumberTimesLength);
+  return arr[integer];
+  //return arr[Math.floor()(Math.random()) * arr.length]
+}
+
+//accepts an array of quotes and a term, returns all quotes containing that term
+//in the author name or quote text
+function findQuotesContainingTerm(quotes, term) {
+  let matches = [];
+  let lowercasedTerm = term.toLowerCase();
+  //look at each quote object :
+  quotes.forEach((item) => {
+    //if author or quote contains term, include it in the result
+    if (
+      item.quote.toLowerCase().includes(lowercasedTerm) ||
+      item.author.toLowerCase().includes(lowercasedTerm)
+    ) {
+      matches.push(item);
+    }
+  });
+  //return all matches
+  return matches;
+}
 
 //Start our server so that it listens for HTTP requests!
 let port = 5000;
